@@ -6,4 +6,10 @@
 // 2-bit input, positive logic switches, positive logic software
 
     // write this
-    
+    #include <stdint.h>
+
+void Switch_Init(void);
+	
+	
+uint32_t InstrumentSwitch(void);
+		

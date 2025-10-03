@@ -47,9 +47,24 @@ int main(void){
   DisableInterrupts();
   PLL_Init(Bus80MHz);    // bus clock at 80 MHz
   // write this
+	Music_Init();
   EnableInterrupts();
+	uint32_t now=0, last=0, lasttrumpet=0, nowtrumpet=0;
   while(1){
       // write this
-  }
+           now = InstrumentSwitch();
+           if((last == 0) && (now== 1)){
+           PlayMusic(7272, Flute, 32);
+           last = now;
+           }
+           if((last == 0) && (now== 16)){
+           PlayMusic(7272, Wave, 64);
+           last = now;
+           }
+           if(now==0){
+           StopMusic();
+           last = now;
+           }
 }
+	}
    

@@ -37,7 +37,21 @@ void DAC_Init(uint16_t data){
     // write this
 	  // Consider the following registers:
 	  // SYSCTL_RCGCSSI_R, SSI1_CR1_R, SSI1_CPSR_R, SSI1_CR0_R, SSI1_DR_R, SSI1_CR1_R
-
+	SYSCTL_RCGCSSI_R |= 0x2;
+	SYSCTL_RCGCGPIO_R |= 0x8;
+	while((SYSCTL_PRGPIO_R&0x08)==0){};
+	GPIO_PORTD_AFSEL_R |= 0xB;
+  GPIO_PORTD_DEN_R |= 0xB;
+GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0xFFFF0F00)+0x00002022;
+	GPIO_PORTD_AMSEL_R = 0;		
+	SSI1_CR1_R= 0;
+	SSI1_CPSR_R = 0x08;
+	SSI1_CR0_R &= ~(0x0000FF00);	// SPO=0; SPH =1; SCR =0;
+	SSI1_CR0_R &= ~64;
+  SSI1_CR0_R |= 128;
+  SSI1_CR0_R |= 0x0F;
+	SSI1_DR_R |= data;
+	SSI1_CR1_R = 2;	
 }
 
 // --------------     DAC_Out   --------------------------------------------
@@ -48,7 +62,11 @@ void DAC_Out(uint16_t code){
     // write this
     // Consider the following registers:
 	  // SSI1_SR_R, SSI1_DR_R
-}
+	  while((SSI1_SR_R&0x00000002)==0){};// SSI Transmit FIFO Not Full
+  SSI1_DR_R = code; 
+}                // data out, no reply
+
+
 
 // --------------     DAC_OutNonBlocking   ------------------------------------
 // Send data to TLV5616 12-bit DAC without checking for room in the FIFO
