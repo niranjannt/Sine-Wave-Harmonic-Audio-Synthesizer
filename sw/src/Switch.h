@@ -11,5 +11,8 @@
 void Switch_Init(void);
 	
 	
-uint32_t InstrumentSwitch(void);
+uint32_t PauseSwitch(void);
 		
+uint32_t ModeSwitch(void);
+
+uint32_t RewindSwitch(void);

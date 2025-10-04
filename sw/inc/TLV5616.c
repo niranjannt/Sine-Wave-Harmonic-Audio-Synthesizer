@@ -46,12 +46,12 @@ GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0xFFFF0F00)+0x00002022;
 	GPIO_PORTD_AMSEL_R = 0;		
 	SSI1_CR1_R= 0;
 	SSI1_CPSR_R = 0x08;
-	SSI1_CR0_R &= ~(0x0000FF00);	// SPO=0; SPH =1; SCR =0;
-	SSI1_CR0_R &= ~64;
-  SSI1_CR0_R |= 128;
+	SSI1_CR0_R &= ~(0x0000FF00);	// SPO=1; SPH =0; SCR =0;
+	SSI1_CR0_R |= 64;
+  SSI1_CR0_R &= ~128;
   SSI1_CR0_R |= 0x0F;
-	SSI1_DR_R |= data;
-	SSI1_CR1_R = 2;	
+	SSI1_DR_R = data;
+	SSI1_CR1_R = 2;	//SSI enabled
 }
 
 // --------------     DAC_Out   --------------------------------------------
