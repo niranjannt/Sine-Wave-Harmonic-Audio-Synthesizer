@@ -163,7 +163,7 @@ if(mode==16 && moderelease==0){
 moderelease=mode;		
 }
 else if(mode==0 && moderelease==16){
-currentsong=((currentsong+1)%	(SONGSIZE+1));
+currentsong=((currentsong+1)%	(SONGSIZE));
 	
 	
 }	
