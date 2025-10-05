@@ -86,8 +86,8 @@ uint32_t noteduration;
 
 uint32_t currentnote;
 Note betteroffalonelead[] = {
-    {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{CC5, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
-    {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{CC5, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
+    {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{BB4, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
+    {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{BB4, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
@@ -155,6 +155,7 @@ void SysTick_Handler(void){ // called at 11 kHz
 	
 	}
 	else{
+	    nosound = 0;
 	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
 	NVIC_ST_CURRENT_R=0;
 	previousnote=currentnote;
@@ -179,7 +180,6 @@ const uint16_t Wave[64] = {
 void playNote(void){
 	static uint32_t sampleindex=0;
 	if(nosound==10){
-		nosound=0;
 		DAC_Out(0);
 	}
 	else{
