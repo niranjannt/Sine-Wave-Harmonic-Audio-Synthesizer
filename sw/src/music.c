@@ -11,6 +11,7 @@
 #include "../inc/TLV5616.h"
 #include "mailbox.h"
 #include "Timer1A.h"
+#include "Timer2A.h"
     // write this// Period =  80000000/7272/Freq=11,001/Freq
     // write this// Period =  80000000/7272/Freq=11,001/Freq
 #define CC7   (38222/64)  // 2093 Hz
@@ -208,6 +209,7 @@ void Music_Init(void){
  SysTick_Init(7272);
  Switch_Init();
  Timer1A_Init(80000);
+ Timer2A_Init(7272);
 }
 
 uint32_t nosoundlead=0;
