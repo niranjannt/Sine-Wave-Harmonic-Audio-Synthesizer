@@ -149,8 +149,8 @@ void SysTick_Handler(void){ // called at 11 kHz
 	if(currentnote!=previousnote){
 	if(songlist[currentsong].notes[currentnote].notereload==0){
 		nosound=10;
-		NVIC_ST_RELOAD_R=10;
-	NVIC_ST_CURRENT_R=0;
+//		NVIC_ST_RELOAD_R=10;
+//	NVIC_ST_CURRENT_R=0;
 	previousnote=currentnote;
 	
 	}
