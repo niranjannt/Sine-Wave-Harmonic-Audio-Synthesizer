@@ -104,7 +104,7 @@ Note betteroffalonebass[] = {
 Note toujourlead[] = {
     {DD4, Whole/128},{GF4, Whole/128},{BB4, Whole/128},{GG4, Whole/128},
     {DD4, (Quarter * 2)/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, (Quarter * 5)/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Quarter/128},{Silent, (Quarter * 5)/128},
-    {GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, (Quarter * 5)/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Quarter/128},{AA4, Eighth/128},{BB4, Quarter/128},{AA4, Eighth/128},
+    {GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, (Quarter * 5)/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
@@ -125,9 +125,8 @@ typedef struct{
 
 
 Song songlist[]={
+    {toujourlead, 159},
 	{betteroffalonelead, 190},
-	{toujourlead, 159}
-	
 };
 uint32_t currentsong;
 //-------------- Music_Init ----------------
