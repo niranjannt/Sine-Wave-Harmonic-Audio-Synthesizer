@@ -179,7 +179,7 @@ const uint16_t Wave[64] = {
 void playNote(void){
 	static uint32_t sampleindex=0;
 	if(nosound==10){
-		DAC_Out(0);
+		DAC_Out(Wave[sampleindex]);
 	}
 	else{
   DAC_Out(Wave[sampleindex]);
