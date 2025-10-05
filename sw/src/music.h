@@ -19,6 +19,7 @@ void playNote(void);
  void Rewind(void);
 void PausePlay(void);
 void Mode(void);
+void playbassnote(void);
 
 
 	

@@ -13,7 +13,7 @@ void Timer2A_Init(uint32_t period){
   TIMER2_TAPR_R = 0;                        // 7) no prescale
   TIMER2_ICR_R = TIMER_ICR_TATOCINT;        // 8) clear timeout flag
   TIMER2_IMR_R = TIMER_IMR_TATOIM;
-  NVIC_EN0_R |= (1 << 21);                  // 10) enable IRQ 21 in NVIC (Timer1A)
+  NVIC_EN0_R |= (1 << 23);                  // 10) enable IRQ 21 in NVIC (Timer1A)
   TIMER2_CTL_R |= 0x01;                     // 11) enable Timer1A
 
 }

@@ -70,10 +70,12 @@ void playNote(void);
 #define Half 120000
 #define Whole 240000
 #define Silent 0
+void  playleadnote(void);
+void playbassnote(void);
 
 
-
-uint32_t currentnote;
+uint32_t currentnotelead;
+uint32_t currentnotebass;
 
 typedef struct{
 	
@@ -84,40 +86,107 @@ uint32_t noteduration;
 	
 } Note;
 
-uint32_t currentnote;
-Note betteroffalonelead[] = {
+//uint32_t currentnote;
+Note betteroffalonelead[] = { // length is 190
+
     {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{BB4, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
+
     {CC5, Eighth/135},{Silent, (Eighth * 14)/135},{BB4, Eighth/135},{CC5, Eighth/135},{Silent, (Eighth * 15)/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, (Eighth * 7)/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
     {CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{GG5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{AA4, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{CC5, Eighth/135},{Silent, Eighth/135},{BB4, Eighth/135},{Silent, Eighth/135},{GG4, Eighth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{FF5, Eighth/135},{Silent, Sixteenth/135},{EE5, Eighth/135},
+
+
 
 };
 
-Note betteroffalonebass[] = {
+
+
+Note betteroffalonebass[] = { // length is 193
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
+
+    {Silent, (Whole * 8)/135},
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
+
+    {FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{FF3, Eighth/135},{FF4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{EE3, Eighth/135},{EE4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{AA3, Eighth/135},{AA4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},{GG3, Eighth/135},{GG4, Eighth/135},
 
 };
 
-Note toujourlead[] = {
+
+
+
+
+Note toujourlead[] = { // length is 159
+
     {DD4, Whole/128},{GF4, Whole/128},{BB4, Whole/128},{GG4, Whole/128},
+
     {DD4, (Quarter * 2)/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, (Quarter * 5)/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Quarter/128},{Silent, (Quarter * 5)/128},
+
     {GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, (Quarter * 5)/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
+
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
+
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
+
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
+
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},
+
     {GF4, Quarter/128},{Silent, Quarter/128},{GF4, Eighth/128},{Silent, Eighth/128},{GF4, Eighth/128},{DD5, Eighth/128},{DF5, Quarter/128},{Silent, Quarter/128},{DF5, Eighth/128},{Silent, Eighth/128},{DF5, Eighth/128},{DD5, Eighth/128},{BB4, Quarter/128},{Silent, Quarter/128},{BB4, Eighth/128},{Silent, Eighth/128},{BB4, Eighth/128},{AA4, Eighth/128},{BB4, Quarter/128},{Silent, (Quarter * 3)/128}
 
+
+
 };
+
+
+
+Note toujourbass[] = { // length is 116
+
+    {DD3, Whole/128},{GF3, Whole/128},{BB3, Whole/128},{GG3, Whole/128},
+
+    {DD3, Whole/128},{GF3, Whole/128},{BB3, Whole/128},{GG3, Whole/128},
+
+    {DD3, Whole/128},{GF3, Whole/128},{BB3, Whole/128},{GG3, Whole/128},
+
+    {DD3, Whole/128},{GF3, Whole/128},{BB3, Whole/128},{GG3, Whole/128},
+
+    {DD3, Whole/128},{GF3, Whole/128},{BB3, Whole/128},{GG3, Whole/128},
+
+    {DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},
+
+    {DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},
+
+    {DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{DD3, Eighth/128},{DD4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{GF3, Eighth/128},{GF4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{BB3, Eighth/128},{BB4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},{GG3, Eighth/128},{GG4, Eighth/128},
+
+};
+
+
+
 
 uint32_t switchnote;
 
 typedef struct{
-	Note* notes;
-	uint32_t songlength;
+	Note* lead;
+	uint32_t leadlength;
+	Note* bass;
+	uint32_t basslength;
 	
 	
 	
@@ -125,8 +194,8 @@ typedef struct{
 
 
 Song songlist[]={
-    {toujourlead, 159},
-	{betteroffalonelead, 190},
+    {toujourlead, 159, toujourbass, 116},
+	{betteroffalonelead, 190, betteroffalonebass, 193},
 };
 uint32_t currentsong;
 //-------------- Music_Init ----------------
@@ -141,26 +210,26 @@ void Music_Init(void){
  Timer1A_Init(80000);
 }
 
-uint32_t nosound=0;
+uint32_t nosoundlead=0;
 uint32_t previousnote=1;
 void SysTick_Handler(void){ // called at 11 kHz
   // output one value to DAC if a sound is active
-	if(currentnote!=previousnote){
-	if(songlist[currentsong].notes[currentnote].notereload==0){
-		nosound=10;
+	if(currentnotelead!=previousnote){
+	if(songlist[currentsong].lead[currentnotelead].notereload==0){
+		nosoundlead=1;
 //		NVIC_ST_RELOAD_R=10;
 //	NVIC_ST_CURRENT_R=0;
-	previousnote=currentnote;
+	previousnote=currentnotelead;
 	
 	}
 	else{
-	    nosound = 0;
-	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
+	    nosoundlead = 0;
+	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
 	NVIC_ST_CURRENT_R=0;
-	previousnote=currentnote;
+	previousnote=currentnotelead;
 	}
 	}
- playNote(); //Plays actual note
+ playleadnote(); //Plays actual note
 
 }
 
@@ -175,43 +244,51 @@ const uint16_t Wave[64] = {
   251,317,390,468,553,641,734,829,926
 };  
 
+	static uint32_t leadindex=0;
+  static uint32_t bassindex=0;
 
-void playNote(void){
-	static uint32_t sampleindex=0;
-	if(nosound==10){
-		DAC_Out(Wave[sampleindex]);
+void playleadnote(void){
+	if(nosoundlead==1){
+		DAC_Out(Wave[leadindex]+Wave[bassindex]);
 	}
 	else{
-  DAC_Out(Wave[sampleindex]);
-	sampleindex++;
-  if(sampleindex>=64){
-  sampleindex=0;
+  DAC_Out(Wave[leadindex]+Wave[bassindex]);
+	leadindex++;
+  if(leadindex>=64){
+  leadindex=0;
 
 	}		
 }
 	
 }
-uint32_t mscounter;
+uint32_t mscounterlead;
+uint32_t mscounterbass;
 void Timer1A_Handler(void){
 	  TIMER1_ICR_R = TIMER_ICR_TATOCINT;  // acknowledge timeout
-	 	mscounter++;
-		
+	 	mscounterlead++;
+		mscounterbass++;
 	
-	if(mscounter==((songlist[currentsong].notes[currentnote].noteduration))){
-	 mscounter=0;
-   currentnote=((((currentnote+1))%(songlist[currentsong].songlength)));
+	if(mscounterlead==((songlist[currentsong].lead[currentnotelead].noteduration))){
+	 mscounterlead=0;
+   currentnotelead=((((currentnotelead+1))%(songlist[currentsong].leadlength)));
 	}
-}
+	if(mscounterbass==((songlist[currentsong].bass[currentnotebass].noteduration))){
+		mscounterbass=0;
+		currentnotebass=((((currentnotebass+1))%(songlist[currentsong].basslength)));
 
+		
+}
+}
 
 void Mode(void){	
 uint32_t mode, moderelease=0;	
 mode=ModeSwitch();
 if(mode==16 && moderelease==0){
+currentsong=((currentsong+1)%	(SONGSIZE));	
 moderelease=mode;		
 }
 else if(mode==0 && moderelease==16){
-currentsong=((currentsong+1)%	(SONGSIZE));
+moderelease=mode;		
 	
 	
 }	
@@ -223,9 +300,6 @@ void PausePlay(void){
 uint32_t pauseplay, pauseplayrelease=0;	
 pauseplay=PauseSwitch();
 if(pauseplay==1 && pauseplayrelease==0){
-pauseplayrelease=pauseplay;		
-}
-else if(pauseplay==0 && pauseplayrelease==1){
 	 playpausetoggle=!playpausetoggle;
 	 if(playpausetoggle==0){
      NVIC_ST_CTRL_R &= ~0x01; 
@@ -233,15 +307,23 @@ else if(pauseplay==0 && pauseplayrelease==1){
     }
    else if(playpausetoggle==1){	 
 	NVIC_ST_CTRL_R |= 0x01;
-	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
+	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
 	NVIC_ST_CURRENT_R=0;
+	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
+	TIMER2_TAR_R=0;
+
 
 	
 	
 	
 	
 	
+}	
+pauseplayrelease=pauseplay;		
 }
+else if(pauseplay==0 && pauseplayrelease==1){
+	 pauseplayrelease=pauseplay;		
+
 	 }
  }
 
@@ -250,12 +332,52 @@ else if(pauseplay==0 && pauseplayrelease==1){
 	uint32_t rewind, rewindrelease=0;
   rewind= RewindSwitch();
   if(rewind==16 && rewindrelease==0){ 
+			 NVIC_ST_RELOAD_R=songlist[currentsong].lead[0].notereload;
+			NVIC_ST_CURRENT_R=0;
+	TIMER2_TAILR_R=songlist[currentsong].bass[0].notereload;
+	TIMER2_TAR_R=0;
+	
   rewindrelease=rewind;
 
  }
 	if(rewind==0 && rewindrelease==16){
-		 NVIC_ST_RELOAD_R=songlist[currentsong].notes[0].notereload;
 		  rewindrelease=rewind;
 	}
 }
- 
+ uint32_t nosoundbass=0;
+ void Timer2A_Handler(void){
+	  TIMER2_ICR_R = TIMER_ICR_TATOCINT;  // acknowledge timeout
+  if(currentnotelead!=previousnote){
+	if(songlist[currentsong].bass[currentnotebass].notereload==0){
+		nosoundbass=1;
+//		NVIC_ST_RELOAD_R=10;
+//	NVIC_ST_CURRENT_R=0;
+	previousnote=currentnotebass;
+	
+	}
+	else{
+	    nosoundbass = 0;
+	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
+	TIMER2_TAR_R=0;
+	previousnote=currentnotebass;
+	}
+	}
+ playbassnote(); //Plays actual note
+
+}
+
+
+void playbassnote(void){
+	if(nosoundbass==1){
+		DAC_Out(Wave[leadindex]+Wave[bassindex]);
+	}
+	else{
+  DAC_Out(Wave[leadindex]+Wave[bassindex]);
+	bassindex++;
+  if(bassindex>=64){
+  bassindex=0;
+
+	}		
+}
+	
+}
