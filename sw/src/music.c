@@ -175,18 +175,15 @@ void playNote(void){
   sampleindex=0;
 
 	}		
-	switchnote++;
 	
 	
 }
 uint32_t mscounter;
 void Timer1A_Handler(void){
 	  TIMER1_ICR_R = TIMER_ICR_TATOCINT;  // acknowledge timeout
-	if(switchnote==((80000)/(songlist[currentsong].notes[currentnote].notereload))){
 	 	mscounter++;
-		switchnote=0;
 		
-	}
+	
 	if(mscounter==((songlist[currentsong].notes[currentnote].noteduration))){
 	 mscounter=0;
    currentnote=((((currentnote+1))%(songlist[currentsong].songlength)));
