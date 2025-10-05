@@ -303,6 +303,7 @@ if(pauseplay==1 && pauseplayrelease==0){
 	 playpausetoggle=!playpausetoggle;
 	 if(playpausetoggle==0){
      NVIC_ST_CTRL_R &= ~0x01; 
+		 TIMER2_CTL_R &= ~0x01;
 	
     }
    else if(playpausetoggle==1){	 
