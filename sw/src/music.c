@@ -133,8 +133,10 @@ const uint16_t Wave[64] = {
 
 void playNote(void){
 	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
+	NVIC_ST_CURRENT_R=0;
 	static uint32_t sampleindex=0;
   DAC_Out(Wave[sampleindex]);
+	sampleindex++;
   if(sampleindex>=64){
   sampleindex=0;
 
@@ -186,7 +188,8 @@ else if(pauseplay==0 && pauseplayrelease==1){
     }
    else if(playpausetoggle==1){	 
 	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
-	
+	NVIC_ST_CURRENT_R=0;
+
 	
 	
 	
@@ -209,3 +212,4 @@ else if(pauseplay==0 && pauseplayrelease==1){
 		  rewindrelease=rewind;
 	}
 }
+ 
