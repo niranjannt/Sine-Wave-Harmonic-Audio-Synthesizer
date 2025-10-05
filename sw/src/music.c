@@ -142,14 +142,23 @@ void Music_Init(void){
  Timer1A_Init(80000);
 }
 
-
+uint32_t nosound=0;
 uint32_t previousnote=1;
 void SysTick_Handler(void){ // called at 11 kHz
   // output one value to DAC if a sound is active
 	if(currentnote!=previousnote){
+	if(songlist[currentsong].notes[currentnote].notereload==0){
+		nosound=10;
+		NVIC_ST_RELOAD_R=10;
+	NVIC_ST_CURRENT_R=0;
+	previousnote=currentnote;
+	
+	}
+	else{
 	NVIC_ST_RELOAD_R=songlist[currentsong].notes[currentnote].notereload;
 	NVIC_ST_CURRENT_R=0;
 	previousnote=currentnote;
+	}
 	}
  playNote(); //Plays actual note
 
@@ -169,13 +178,18 @@ const uint16_t Wave[64] = {
 
 void playNote(void){
 	static uint32_t sampleindex=0;
+	if(nosound==10){
+		nosound=0;
+		DAC_Out(0);
+	}
+	else{
   DAC_Out(Wave[sampleindex]);
 	sampleindex++;
   if(sampleindex>=64){
   sampleindex=0;
 
 	}		
-	
+}
 	
 }
 uint32_t mscounter;
