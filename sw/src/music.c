@@ -213,22 +213,23 @@ void Music_Init(void){
 }
 
 uint32_t nosoundlead=0;
-uint32_t previousnote=1;
+uint32_t previousnotelead=1;
+uint32_t previousnotebass=1;
 void SysTick_Handler(void){ // called at 11 kHz
   // output one value to DAC if a sound is active
-	if(currentnotelead!=previousnote){
+	if(currentnotelead!=previousnotelead){
 	if(songlist[currentsong].lead[currentnotelead].notereload==0){
 		nosoundlead=1;
 //		NVIC_ST_RELOAD_R=10;
 //	NVIC_ST_CURRENT_R=0;
-	previousnote=currentnotelead;
+	previousnotelead=currentnotelead;
 	
 	}
 	else{
 	    nosoundlead = 0;
 	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
 	NVIC_ST_CURRENT_R=0;
-	previousnote=currentnotelead;
+	previousnotelead=currentnotelead;
 	}
 	}
  playleadnote(); //Plays actual note
@@ -281,15 +282,24 @@ void Timer1A_Handler(void){
 		
 }
 }
+ uint32_t nosoundbass=0;
+uint32_t mode, moderelease=0;	
 
 void Mode(void){	
-uint32_t mode, moderelease=0;	
 mode=ModeSwitch();
 if(mode==16 && moderelease==0){
-currentsong=((currentsong+1)%	(SONGSIZE));	
 moderelease=mode;		
 }
 else if(mode==0 && moderelease==16){
+currentsong=((currentsong+1)%	(SONGSIZE));	
+leadindex = 0;
+currentnotelead = 0;
+currentnotebass =0;	
+bassindex=0;
+nosoundlead=0;
+nosoundbass=0;
+previousnotelead=1;
+previousnotebass=1;
 moderelease=mode;		
 	
 	
@@ -298,33 +308,36 @@ moderelease=mode;
 
 }
 uint32_t playpausetoggle=1;
-void PausePlay(void){
 uint32_t pauseplay, pauseplayrelease=0;	
+
+void PausePlay(void){
 pauseplay=PauseSwitch();
 if(pauseplay==1 && pauseplayrelease==0){
+		
+pauseplayrelease=pauseplay;		
+}
+else if(pauseplay==0 && pauseplayrelease==1){
 	 playpausetoggle=!playpausetoggle;
 	 if(playpausetoggle==0){
      NVIC_ST_CTRL_R &= ~0x01; 
 		 TIMER2_CTL_R &= ~0x01;
+		 TIMER1_CTL_R &= ~0x01;
 	
     }
    else if(playpausetoggle==1){	 
 	NVIC_ST_CTRL_R |= 0x01;
 	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
-	NVIC_ST_CURRENT_R=0;
+	//NVIC_ST_CURRENT_R=0;
 	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
-	TIMER2_TAR_R=0;
+	//TIMER2_TAR_R=0;
+  TIMER1_TAILR_R = 80000;
 
-
 	
 	
 	
 	
 	
-}	
-pauseplayrelease=pauseplay;		
 }
-else if(pauseplay==0 && pauseplayrelease==1){
 	 pauseplayrelease=pauseplay;		
 
 	 }
@@ -336,10 +349,17 @@ else if(pauseplay==0 && pauseplayrelease==1){
   rewind= RewindSwitch();
   if(rewind==16 && rewindrelease==0){ 
 			 NVIC_ST_RELOAD_R=songlist[currentsong].lead[0].notereload;
-			NVIC_ST_CURRENT_R=0;
+			//NVIC_ST_CURRENT_R=0;
 	TIMER2_TAILR_R=songlist[currentsong].bass[0].notereload;
-	TIMER2_TAR_R=0;
-	
+	//TIMER2_TAR_R=0;
+	leadindex = 0;
+currentnotelead = 0;
+currentnotebass =0;	
+bassindex=0;
+nosoundlead=0;
+nosoundbass=0;
+previousnotelead=1;
+previousnotebass=1;
   rewindrelease=rewind;
 
  }
@@ -347,22 +367,21 @@ else if(pauseplay==0 && pauseplayrelease==1){
 		  rewindrelease=rewind;
 	}
 }
- uint32_t nosoundbass=0;
  void Timer2A_Handler(void){
 	  TIMER2_ICR_R = TIMER_ICR_TATOCINT;  // acknowledge timeout
-  if(currentnotelead!=previousnote){
+  if(currentnotebass!=previousnotebass){
 	if(songlist[currentsong].bass[currentnotebass].notereload==0){
 		nosoundbass=1;
 //		NVIC_ST_RELOAD_R=10;
 //	NVIC_ST_CURRENT_R=0;
-	previousnote=currentnotebass;
+	previousnotebass=currentnotebass;
 	
 	}
 	else{
 	    nosoundbass = 0;
 	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
 	TIMER2_TAR_R=0;
-	previousnote=currentnotebass;
+	previousnotebass=currentnotebass;
 	}
 	}
  playbassnote(); //Plays actual note
