@@ -12,6 +12,9 @@
 #include "mailbox.h"
 #include "Timer1A.h"
 #include "Timer2A.h"
+void DisableInterrupts(void); // Disable interrupts
+void EnableInterrupts(void);  // Enable interrupts
+
     // write this// Period =  80000000/7272/Freq=11,001/Freq
     // write this// Period =  80000000/7272/Freq=11,001/Freq
 #define CC7   (38222/64)  // 2093 Hz
@@ -77,6 +80,7 @@ void playbassnote(void);
 
 uint32_t currentnotelead;
 uint32_t currentnotebass;
+	uint32_t rewindval, rewindrelease=0;
 
 typedef struct{
 	
@@ -195,8 +199,8 @@ typedef struct{
 
 
 Song songlist[]={
-    {toujourlead, 159, toujourbass, 116},
-	{betteroffalonelead, 190, betteroffalonebass, 193},
+		{betteroffalonelead, 190, betteroffalonebass, 193},
+    {toujourlead, 159, toujourbass, 116}
 };
 uint32_t currentsong;
 //-------------- Music_Init ----------------
@@ -252,10 +256,10 @@ const uint16_t Wave[64] = {
 
 void playleadnote(void){
 	if(nosoundlead==1){
-		DAC_Out(Wave[leadindex]+Wave[bassindex]);
+		DAC_Out((Wave[leadindex]+Wave[bassindex])/(2));
 	}
 	else{
-  DAC_Out(Wave[leadindex]+Wave[bassindex]);
+  DAC_Out((Wave[leadindex]+Wave[bassindex])/2);
 	leadindex++;
   if(leadindex>=64){
   leadindex=0;
@@ -286,11 +290,12 @@ void Timer1A_Handler(void){
 uint32_t mode, moderelease=0;	
 
 void Mode(void){	
+//DisableInterrupts();
 mode=ModeSwitch();
-if(mode==16 && moderelease==0){
+if(mode==64 && moderelease==0){
 moderelease=mode;		
 }
-else if(mode==0 && moderelease==16){
+else if(mode==0 && moderelease==64){
 currentsong=((currentsong+1)%	(SONGSIZE));	
 leadindex = 0;
 currentnotelead = 0;
@@ -305,54 +310,139 @@ moderelease=mode;
 	
 }	
 	
-
+//EnableInterrupts();
 }
-uint32_t playpausetoggle=1;
-uint32_t pauseplay, pauseplayrelease=0;	
+uint32_t playpausetoggle=0;
+
+      uint32_t pauseplay, pauseplayrelease=0;
+
+      uint32_t currnotebuffer;
+
+      uint32_t mscounterbuff;
+
+      uint32_t samplebuff;
+
+      uint32_t prevnotebuffer;
+
+      uint32_t nosoundbuffer;
+uint32_t currentnotebassbuffer=0, mscounterbassbuff=0, samplebuffbass=0, prevnotebassbuff=0;
+uint32_t nosoundbufferbass=0;
 
 void PausePlay(void){
-pauseplay=PauseSwitch();
-if(pauseplay==1 && pauseplayrelease==0){
-		
-pauseplayrelease=pauseplay;		
-}
-else if(pauseplay==0 && pauseplayrelease==1){
-	 playpausetoggle=!playpausetoggle;
-	 if(playpausetoggle==0){
-     NVIC_ST_CTRL_R &= ~0x01; 
-		 TIMER2_CTL_R &= ~0x01;
-		 TIMER1_CTL_R &= ~0x01;
-	
-    }
-   else if(playpausetoggle==1){	 
-	NVIC_ST_CTRL_R |= 0x01;
-	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
-	//NVIC_ST_CURRENT_R=0;
-	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
-	//TIMER2_TAR_R=0;
-  TIMER1_TAILR_R = 80000;
 
+pauseplay=PauseSwitch();
+
+if(pauseplay==1 && pauseplayrelease==0){
+
+pauseplayrelease=pauseplay;
+
+}
+
+else if(pauseplay==0 && pauseplayrelease==1){
+
+	 if(playpausetoggle==0){
+
+     NVIC_ST_CTRL_R &= ~0x01;
+		 
+		 TIMER2_CTL_R &= ~0x01;
+		 
+		 TIMER1_CTL_R &= ~0x01;
+
+     currnotebuffer = currentnotelead;
+
+     mscounterbuff = mscounterlead;
+
+     samplebuff = leadindex;
+
+     prevnotebuffer = previousnotelead;
+
+     nosoundbuffer = nosoundlead;
+		 
+		 currentnotebassbuffer = currentnotebass;
+		 mscounterbassbuff = mscounterbass;
+		 samplebuffbass = bassindex;
+		 prevnotebassbuff = previousnotebass;
+		 nosoundbufferbass = nosoundbass;
+
+     playpausetoggle = 1;
+
+    }
+
+	else if(playpausetoggle==1){
+
+	NVIC_ST_CTRL_R |= 0x01;
+		
+	TIMER2_CTL_R |= 0x01;
+		
+	TIMER1_CTL_R |= 0x01;
+
+
+	currentnotelead = currnotebuffer;
+
+	mscounterlead = mscounterbuff;
+
+	leadindex = samplebuff;
+
+	previousnotelead = prevnotebuffer;
+
+	nosoundlead = nosoundbuffer;
+		
+	currentnotebass= currentnotebassbuffer;
+
+  mscounterbass = mscounterbass;
+
+  bassindex = samplebuffbass;
+
+ previousnotebass = prevnotebassbuff;		
+		
+ nosoundbass = nosoundbufferbass;
+
+if(songlist[currentsong].lead[currentnotelead].notereload==0){
 	
+	nosoundlead=1;
+}
+if(songlist[currentsong].bass[currentnotebass].notereload==0){
 	
-	
-	
+	nosoundbass=1;
 	
 }
-	 pauseplayrelease=pauseplay;		
+if(nosoundlead==0){
+	NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
+}
+		//NVIC_ST_CURRENT_R=0;
+
+if(nosoundbass==0){	
+	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
+}
+	//TIMER2_TAR_R=0;
+	
+	TIMER1_TAILR_R = 80000;
+	
+	//TIMER1_TAR_R=0;
+
+
+	playpausetoggle = 0;
+	
+
+	//NVIC_ST_CURRENT_R=0;
 
 	 }
+
+	 pauseplayrelease=pauseplay;
+
+	 }
+
  }
+
 
  
  void Rewind(void){
-	uint32_t rewind, rewindrelease=0;
-  rewind= RewindSwitch();
-  if(rewind==16 && rewindrelease==0){ 
-			 NVIC_ST_RELOAD_R=songlist[currentsong].lead[0].notereload;
-			//NVIC_ST_CURRENT_R=0;
-	TIMER2_TAILR_R=songlist[currentsong].bass[0].notereload;
-	//TIMER2_TAR_R=0;
-	leadindex = 0;
+	 //DisableInterrupts();
+
+  rewindval= RewindSwitch();
+  if(rewindval==16 && rewindrelease==0){ 
+		
+			leadindex = 0;
 currentnotelead = 0;
 currentnotebass =0;	
 bassindex=0;
@@ -360,12 +450,31 @@ nosoundlead=0;
 nosoundbass=0;
 previousnotelead=1;
 previousnotebass=1;
-  rewindrelease=rewind;
+		
+if(songlist[currentsong].lead[currentnotelead].notereload==0){
+	
+	nosoundlead=1;
+}
+if(songlist[currentsong].bass[currentnotebass].notereload==0){
+	
+	nosoundbass=1;
+	
+}
+if(nosoundlead==0){
+			 NVIC_ST_RELOAD_R=songlist[currentsong].lead[currentnotelead].notereload;
+}
+			//NVIC_ST_CURRENT_R=0;
+if(nosoundbass==0){
+	TIMER2_TAILR_R=songlist[currentsong].bass[currentnotebass].notereload;
+}
+	//TIMER2_TAR_R=0;
+  rewindrelease=rewindval;
 
  }
-	if(rewind==0 && rewindrelease==16){
-		  rewindrelease=rewind;
+	if(rewindval==0 && rewindrelease==16){
+		  rewindrelease=rewindval;
 	}
+	//EnableInterrupts();
 }
  void Timer2A_Handler(void){
 	  TIMER2_ICR_R = TIMER_ICR_TATOCINT;  // acknowledge timeout
@@ -391,10 +500,10 @@ previousnotebass=1;
 
 void playbassnote(void){
 	if(nosoundbass==1){
-		DAC_Out(Wave[leadindex]+Wave[bassindex]);
+		DAC_Out((Wave[leadindex]+Wave[bassindex])/2);
 	}
 	else{
-  DAC_Out(Wave[leadindex]+Wave[bassindex]);
+  DAC_Out((Wave[leadindex]+Wave[bassindex])/2);
 	bassindex++;
   if(bassindex>=64){
   bassindex=0;

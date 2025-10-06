@@ -29,7 +29,7 @@ void Switch_Init(){
 
 uint32_t ModeSwitch(){
 
-return((GPIO_PORTC_DATA_R&16));
+return((GPIO_PORTC_DATA_R&64));
 	
 }
 
