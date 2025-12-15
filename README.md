@@ -1,48 +1,92 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/OGM-lMWB)
-# Lab 5 Music Player and Audio Amp
+# Lab 5: Digital Music Player with TLV5616 DAC and LM4890 Audio Amplifier  
 
-# ECE445L-Lab5
+## Team Size
+2  
 
+## Project Overview
+This lab demonstrates how to generate analog audio signals from a microcontroller using a **12-bit TLV5616 DAC** and an **LM4890 audio amplifier**. The system stores music as a data structure, sends digital values to the DAC over **SSI1**, and drives an **8Ω speaker**.  
 
-## HW
+Key features:
+- High-quality analog waveform generation from digital data  
+- Modular software with separate drivers for DAC, switches, and music playback  
+- Timer interrupts for precise waveform timing  
+- Audio output through a speaker with configurable gain  
 
-The hw folder should contain your schematic and board files for your PCB or
-circuits. In labs 3-11, you will be creating schematics for your circuit
-in Kicad. 
+---
 
-## SW
+## Hardware
+- **Microcontroller**: EK-TM4C123GXL  
+- **DAC**: TLV5616C 12-bit (single, SSI interface)  
+- **Audio Amplifier**: LM4890M  
+- **Voltage Reference**: LM4041CILPR  
+- **Speaker**: 8Ω  
+- **Passive components**: Resistors, capacitors as required  
 
-The sw folder should contain your application firmware and software written for
-the lab. The sw/inc folder contains firmware drivers written for you by
-Professor Valvano. Feel free to write your own (in fact, in some labs, you may
-be required to write your own).
+### TLV5616C SSI Pin Connections
+- **SSIClk (SCLK)** → PD0  
+- **SSIFss (FS)** → PD1  
+- **SSITx (DIN)** → PD3  
 
-You can place any other source files in the sw/ folder. TAs will look at the
-files you create and/or modify for software quality and for running your
-project.
+> The SSI module is configured to match the TLV5616 timing: **SPO=1, SPH=0, SCR=0, CPSDVSR=8, DSS=16-bit**.  
 
-## Resources
+---
 
-A couple files are provided in the Resources folder so you don't have to keep
-searching for that one TI document. Some of them are immediately useful, like
-the TM4C datasheet. Others may be useful for your final project, like the
-TM4C_System_Design_Guidelines page.
+## Software Overview
+- **DAC driver**: `DAC.h` / `DAC.c`  
+  - `DAC_Init(uint16_t data)` – initializes SSI1 and sets initial DAC output  
+  - `DAC_Out(uint16_t code)` – sends a 12-bit value to the DAC  
+- **Switch driver**: `Switch.h` / `Switch.c` for user input  
+- **Music player module**: `Music.h` / `Music.c`  
+  - Stores song as a structured array of notes and durations  
+  - Handles playback using timer interrupts  
 
-## Git and Github
+---
 
-We will extensively use Git and Github for managing lab projects. This makes it
-easier for TAs to grade and help debug the project by allowing the students to
-see commit histories, maintain a common project structure, collaborate with
-partners, merge different codebases, and to debug work.
+## Project Goals
+- Understand DACs and voltage references  
+- Create SSI communication with correct timing for TLV5616  
+- Design and implement modular software for music playback  
+- Drive a speaker with an audio amplifier to produce high-quality sound  
 
-Two common ways of using Git and Github are [Github Desktop](https://desktop.github.com/) and the [command line](https://git-scm.com/downloads). [Tutorials](https://dev.to/mollynem/git-github--workflow-fundamentals-5496) are also abundant on the net for you to peruse. We've provided a cheatsheet for git in the Resources folder.
+---
 
-It is highly recommended to make the most out of Git, even if you've never used
-it before. Version control will save you a lot of suffering, and tools like Git
-or SVN are ubiquitous in the industry.
+## Procedure
+1. **Write low-level drivers**
+   - Implement DAC initialization and data transmission over SSI1  
+   - Implement switch interface for controlling playback  
 
-## Lab Report
+2. **Design music data structure**
+   - Store notes, durations, and optional rests or envelopes  
+   - Implement `Music_Play()` to stream data to DAC using interrupts  
 
-Following the lab doc provided at the root of this project, the TAs request you
-submit a lab report in Microsoft Word (or Pages, if you're a Mac user). Please
-name it `EID_lab_LAB_NUMBER_report.pdf`.
+3. **Assemble DAC and voltage reference**
+   - Connect TLV5616C to TM4C123GXL using SSI1 pins  
+   - Build voltage reference circuit using **LM4041CILPR** for stable DAC output  
+
+4. **Build audio amplifier**
+   - Solder LM4890 to a breakout board  
+   - Connect amplifier output to the 8Ω speaker  
+
+5. **Debug and test**
+   - Verify DAC output matches expected values  
+   - Listen to the music playback and tune amplifier gain for linearity  
+   - Optional: Enclose speaker to enhance sound quality  
+
+---
+
+## References
+- [TLV5616C Datasheet](https://www.ti.com/lit/ds/symlink/tlv5616.pdf)  
+- [LM4890 Datasheet](https://www.ti.com/lit/ds/symlink/lm4890.pdf)  
+- [LM4041 Voltage Reference Datasheet](https://www.ti.com/lit/ds/symlink/lm4041.pdf)  
+- TM4C123GXL Periodic Timer and SSI example projects  
+
+---
+
+## Notes
+- Only the **TLV5616C DAC** and **LM4041CILPR voltage reference** are used in this project.  
+- Sound quality is prioritized over loudness.  
+- Factors affecting quality:
+  - DAC precision and linearity  
+  - Amplifier gain and frequency response  
+  - DAC update rate and interrupt jitter  
+  - Complexity of the stored music data  
